@@ -15,34 +15,36 @@
 ### 安装
 
 ```bash
-# 一键部署 OCI Docker Network Guard (开机自启 + 每30分钟刷新 veth 限速)
+# 一键安装 OCI Docker Network Guard + 定时执行
 curl -fsSL https://raw.githubusercontent.com/999k923/oci-docker-network-guard/main/oci-docker-network-guard-all.sh -o /usr/local/bin/oci-docker-network-guard-all.sh && \
 chmod +x /usr/local/bin/oci-docker-network-guard-all.sh && \
+# 写 systemd service
 cat >/etc/systemd/system/docker-veth-guard.service <<'EOF'
 [Unit]
 Description=OCI Docker veth bandwidth guard
 After=docker.service
-Wants=docker.service
+Requires=docker.service
 
 [Service]
 Type=oneshot
 ExecStart=/usr/local/bin/oci-docker-network-guard-all.sh
 EOF
+# 写 systemd timer
 cat >/etc/systemd/system/docker-veth-guard.timer <<'EOF'
 [Unit]
-Description=Run OCI Docker veth guard every 30 minutes
+Description=Run docker-veth-guard every 30 minutes
 
 [Timer]
-OnBootSec=5min
+OnBootSec=1min
 OnUnitActiveSec=30min
 Persistent=true
 
 [Install]
 WantedBy=timers.target
 EOF
-systemctl daemon-reload && \
-systemctl enable --now docker-veth-guard.timer && \
-systemctl start docker-veth-guard.timer
-echo "✅ OCI Docker Network Guard 部署完成，开机自启 + 每30分钟刷新 veth 限速已启用。"
+# 重新加载 systemd 并启用 timer
+systemctl daemon-reload && systemctl enable --now docker-veth-guard.timer && \
+# 立即运行一次
+/usr/local/bin/oci-docker-network-guard-all.sh
 
 ```
