@@ -16,7 +16,7 @@
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/999k923/oci-docker-network-guard/main/install.sh | bash
-
+```
 ### 卸载
 ```bash
 curl -fsSL https://raw.githubusercontent.com/999k923/oci-docker-network-guard/main/uninstall.sh | bash
