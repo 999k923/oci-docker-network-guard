@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-REPO_RAW="https://raw.githubusercontent.com/你/oci-docker-network-guard/main"
+REPO_RAW="https://raw.githubusercontent.com/999k923/oci-docker-network-guard/main"
 
 echo "=== OCI Docker Network Guard Installer ==="
 
