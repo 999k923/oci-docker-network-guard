@@ -13,11 +13,25 @@
 
 ## 使用方法
 
-```bash
-# 克隆项目
-git clone https://github.com/999k923/oracle-docker-stable.git
-cd oracle-docker-stable
+# OCI Docker Network Guard
 
-# 赋予执行权限并运行
-chmod +x fix.sh
-sudo ./fix.sh
+防止 Oracle Cloud OCI 免费实例在使用 Docker / Dockge / 1Panel
+时因网络洪峰导致整机掉线。
+
+## 特性
+
+- 固定主网卡名称
+- 禁止 systemd-networkd 干扰 Docker 网络
+- 统一 MTU = 1500
+- 所有容器 veth 限速（防网络洪峰）
+- systemd 开机自动生效
+
+## 一键安装
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/999k923/oci-docker-network-guard/main/install.sh | bash
+```
+## 卸载
+```bash
+curl -fsSL https://raw.githubusercontent.com/999k923/oci-docker-network-guard/main/uninstall.sh | bash
+```
