@@ -45,16 +45,16 @@ ExecStart=/usr/local/bin/oci-docker-network-guard-all.sh safe
 EOF
 echo "[OK] systemd service 创建完成"
 
-### 4️⃣ 创建 systemd timer，每半小时执行一次
+### 4️⃣ 创建 systemd timer，每半小时执行一次（固定 0 分和 30 分）
 echo "[INFO] 创建 systemd timer..."
 cat >/etc/systemd/system/docker-veth-guard.timer <<EOF
 [Unit]
 Description=Run docker-veth-guard every 30 minutes
 
 [Timer]
-OnBootSec=1min
-OnUnitActiveSec=30min
+OnCalendar=*:0/30
 Persistent=true
+AccuracySec=1min
 
 [Install]
 WantedBy=timers.target
@@ -70,7 +70,7 @@ echo
 echo "=== 安装完成 ==="
 echo "✔ 脚本已保存并授予权限"
 echo "✔ 初次初始化已执行"
-echo "✔ Timer 每半小时自动运行 safe 模式"
+echo "✔ Timer 每半小时固定在 0 分和 30 分执行 safe 模式"
 echo "✔ 开机后 Timer 会自动启动"
 echo
 echo "👉 建议现在 reboot 一次，让所有规则完全生效"
